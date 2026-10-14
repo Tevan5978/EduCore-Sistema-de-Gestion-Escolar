@@ -1,90 +1,88 @@
 # EduCore — Sistema de Gestión Escolar
 
+Sistema de gestión escolar desarrollado en Python para apoyar la administración académica y organizativa de un colegio. El proyecto se enfoca en estructuras de datos y algoritmos aplicados a un caso real de gestión estudiantil.
+
 ## Descripción
 
-EduCore es una aplicación desarrollada en Python para apoyar la administración académica y organizativa de un colegio. El sistema permite gestionar estudiantes, profesores, asignaturas, calificaciones y solicitudes administrativas mediante diferentes estructuras de datos.
-
-El proyecto se desarrolla progresivamente en cuatro fases, de acuerdo con los contenidos de la asignatura de estructuras de datos.
+EduCore permite registrar estudiantes, consultar información, registrar notas por asignatura, calcular promedios, ordenar registros y analizar resultados básicos. La versión actual corresponde a la Fase 1 del proyecto.
 
 ## Objetivo general
 
-Desarrollar una aplicación funcional en Python que permita solucionar problemas de gestión escolar mediante la implementación y el análisis de estructuras de datos y algoritmos.
+Desarrollar una aplicación funcional en Python para solucionar problemas de gestión escolar mediante estructuras de datos y análisis de complejidad.
 
 ## Objetivos específicos
 
-- Gestionar información de estudiantes, profesores y asignaturas.
-- Implementar algoritmos de búsqueda y ordenación.
-- Utilizar vectores y matrices para organizar información académica.
-- Implementar listas simplemente y doblemente enlazadas.
-- Gestionar solicitudes mediante pilas y colas.
-- Aplicar recursividad en operaciones apropiadas.
-- Implementar árboles y grafos para organizar registros y representar conexiones.
-- Analizar la complejidad de los algoritmos utilizados.
-- Aplicar buenas prácticas de programación colaborativa con Git y GitHub.
+- Gestionar información de estudiantes.
+- Registrar y consultar notas por matriz.
+- Ordenar estudiantes por nombre o código.
+- Calcular promedios por estudiante.
+- Mostrar estadísticas básicas del sistema.
+- Trabajar con GitHub y buenas prácticas de programación colaborativa.
 
-## Alcance
+## Requisitos
 
-El sistema contempla cuatro fases de desarrollo:
+- Python 3.10 o superior.
+- Visual Studio Code o cualquier editor de Python.
+- Git y GitHub para control de versiones.
 
-1. Vectores, matrices, ordenación y complejidad.
-2. Listas enlazadas simples y dobles.
-3. Pilas, colas y recursividad.
-4. Árboles y grafos.
+## Cómo ejecutar
 
-El alcance definitivo se ajustará a los requisitos de cada entrega y a la retroalimentación del docente.
+1. Abra la carpeta del proyecto en Visual Studio Code.
+2. Abra una terminal en la carpeta del proyecto.
+3. Ejecute:
 
-## Tecnologías
+```bash
+python main.py
+```
 
-- Python 3.
-- Git y GitHub.
-- Pruebas automatizadas con unittest o pytest, según lo acordado por el equipo.
+En Windows, si `python` no funciona:
 
-## Integrantes y roles
+```bash
+py main.py
+```
 
-| Integrante | Usuario de GitHub | Responsabilidad principal |
-|---|---|---|
-| Integrante 1 | @usuario1 | Gestión académica y fase 1 |
-| Integrante 2 | @usuario2 | Listas, pilas, colas y recursividad |
-| Integrante 3 | @usuario3 | Árboles, grafos e integración |
+## Qué incluye esta versión
 
-Todos los integrantes participarán en el desarrollo, las pruebas y las defensas orales.
+- Registro de estudiantes en memoria.
+- Búsqueda y visualización de estudiantes.
+- Registro de notas de 0.0 a 5.0 en una matriz.
+- Cálculo de promedio por estudiante.
+- Ordenamiento alfabético de estudiantes.
+- Estadísticas básicas del sistema.
+- Pruebas automáticas con `unittest`.
 
-## Metodología de trabajo
+## Estructura del proyecto
 
-- Desarrollo incremental por fases.
-- Trabajo mediante ramas y pull requests.
-- Revisión del código antes de integrar cambios en `main`.
-- Commits descriptivos y avances periódicos.
-- Pruebas de las operaciones y documentación de las estructuras implementadas.
+- `main.py`: menú principal de consola.
+- `modelos/estudiante.py`: clase `Estudiante`.
+- `servicios/gestion_estudiantes.py`: lógica de gestión, búsqueda y ordenamiento.
+- `estructuras/matriz_notas.py`: matriz de notas.
+- `pruebas/test_fase1.py`: pruebas de la fase 1.
+- `docs/`: documentación del proceso y uso de IA.
+
+## Ejecutar pruebas
+
+Desde la carpeta principal:
+
+```bash
+python -m unittest discover -s pruebas -v
+```
+
+## Complejidad inicial
+
+- Registro de estudiantes: O(1) amortizado.
+- Búsqueda por código: O(n).
+- Ordenamiento burbuja: O(n²).
+- Recorrido de la matriz de notas: O(f × c).
+
+## Trabajo del equipo
+
+Cada integrante debe ejecutar, probar y entender el código. Se recomienda documentar cambios reales, revisiones y cualquier apoyo de IA conforme a las indicaciones del curso.
 
 ## Uso de inteligencia artificial
 
-El equipo podrá utilizar asistentes de inteligencia artificial como apoyo para comprender conceptos, explorar alternativas de implementación, generar casos de prueba y revisar errores.
-
-Las propuestas generadas serán revisadas, probadas y comprendidas por los integrantes antes de incorporarse al proyecto. Se documentarán los usos relevantes de IA, los prompts utilizados y las modificaciones realizadas por el equipo.
+El proyecto hace uso de IA de manera educativa y responsable para apoyar el diseño de soluciones, la revisión de errores y la documentación. Las propuestas generadas fueron revisadas y comprendidas por el equipo antes de incorporarse al proyecto.
 
 ## Licencia
 
-Pendiente de definir por el equipo y de acuerdo con las condiciones del curso.
-
-## Tecnologías Utilizadas
-- **Lenguaje:** Python 3.8+
-- **Testing:** pytest
-- **Control de versiones:** Git y GitHub
-
-## Integrantes
-- Carlos Daniel Jiménez
-- Estevan Gonzalez Beltrán
-- Isabella Flórez
-
-## Uso Educativo de IA
-Este proyecto ha sido desarrollado utilizando IA de manera **educativa y responsable** para:
-- Recibir asesoramiento en el diseño de estructuras de datos.
-- Optimizar algoritmos y mejorar la calidad del código
-- Facilitar la documentación del proyecto.
-- Acelerar el proceso de desarrollo sin comprometer el aprendizaje.
-- Ayuda al diseño y ambiente.
-
-El uso de IA ha sido complementario al aprendizaje, permitiendo que los integrantes se enfoquen en los conceptos fundamentales de Estructuras de Datos mientras se recibe retroalimentación técnica. Hemos estado haciendo el juego nosotros con explcaciones que nos da la IA.
-
-
+Pendiente por definir según las condiciones del curso.
