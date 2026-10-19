@@ -46,6 +46,38 @@ class ListaSimple:
             actual = actual.siguiente
         return valores
 
+    def buscar(self, codigo):
+        actual = self.cabeza
+        while actual is not None:
+            if actual.valor.codigo == codigo:
+                return actual.valor
+            actual = actual.siguiente
+        return None
+
+    def eliminar(self, codigo):
+        if self.cabeza is None:
+            return False
+
+        if self.cabeza.valor.codigo == codigo:
+            self.cabeza = self.cabeza.siguiente
+            if self.cabeza is None:
+                self.cola = None
+            self.tamano -= 1
+            return True
+
+        anterior = self.cabeza
+        actual = self.cabeza.siguiente
+        while actual is not None:
+            if actual.valor.codigo == codigo:
+                anterior.siguiente = actual.siguiente
+                if actual is self.cola:
+                    self.cola = anterior
+                self.tamano -= 1
+                return True
+            anterior = actual
+            actual = actual.siguiente
+        return False
+
     def mostrar_estructura(self):
         # Diagnóstico: dibuja los nodos y sus enlaces para explicarlos en la defensa.
         if self.cabeza is None:

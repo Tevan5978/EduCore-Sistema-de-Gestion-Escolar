@@ -13,6 +13,7 @@ def mostrar_menu():
     print("6. Calcular promedio de un estudiante")
     print("7. Ordenar estudiantes por nombre")
     print("8. Mostrar estadísticas básicas")
+    print("9. Eliminar estudiante")
     print("0. Salir")
 
 
@@ -123,7 +124,8 @@ def main():
                     print(f"Promedio de {gestion.estudiantes[posicion].nombre}: {promedio:.2f}")
 
         elif opcion == "7":
-            gestion.ordenar_por_nombre()
+            orden = gestion.ordenar_por_nombre()
+            notas.reordenar(orden)
             print("Estudiantes ordenados alfabéticamente.")
             gestion.mostrar_todos()
 
@@ -132,6 +134,20 @@ def main():
             print(f"Cantidad de asignaturas en la matriz: {notas.cantidad_asignaturas()}")
             print(f"Cantidad total de notas registradas: {notas.contar_notas()}")
 
+        elif opcion == "9":
+            if len(gestion.estudiantes) == 0:
+                print("No hay estudiantes registrados.")
+                continue
+            codigo = input("Código del estudiante que desea eliminar: ").strip()
+            estudiante = gestion.buscar(codigo)
+            if estudiante is None:
+                print("Estudiante no encontrado.")
+            else:
+                posicion = gestion.estudiantes.index(estudiante)
+                gestion.eliminar(codigo)
+                notas.eliminar_estudiante(posicion)
+                print("Estudiante eliminado correctamente.")
+                
         elif opcion == "0":
             print("Gracias por usar EduCore.")
             break

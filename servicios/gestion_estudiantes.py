@@ -32,24 +32,28 @@ class GestionEstudiantes:
         return True
 
     def buscar(self, codigo):
-        # Búsqueda lineal: recorre los nodos uno por uno.
-        actual = self.lista_simple.cabeza
-        while actual is not None:
-            if actual.valor.codigo == codigo:
-                return actual.valor
-            actual = actual.siguiente
-        return None
+        return self.lista_simple.buscar(codigo)
+
+    def eliminar(self, codigo):
+        # Los mismos objetos están en ambas listas, así que se sacan de las dos.
+        if self.lista_simple.buscar(codigo) is None:
+            return False
+        self.lista_simple.eliminar(codigo)
+        self.lista_doble.eliminar(codigo)
+        return True
 
     def mostrar_todos(self):
         if self.lista_simple.esta_vacia():
             print("No hay estudiantes registrados.")
             return
 
-        print("\nLISTA DE ESTUDIANTES")
-        actual = self.lista_simple.cabeza
-        while actual is not None:
-            print(actual.valor)
-            actual = actual.siguiente
+        print("\nLISTA DE ESTUDIANTES (de inicio a fin)")
+        for estudiante in self.lista_simple.recorrer():
+            print(estudiante)
+
+        print("\nLISTA DE ESTUDIANTES (de fin a inicio)")
+        for estudiante in self.lista_doble.recorrer_atras():
+            print(estudiante)
 
         print("\nESTRUCTURA DE LAS LISTAS")
         print("Lista simple:", self.lista_simple.mostrar_estructura())
@@ -59,6 +63,13 @@ class GestionEstudiantes:
         # Ordenamiento burbuja sobre un vector temporal; luego se reconstruyen las listas.
         vector = self.lista_doble.recorrer_adelante()
         n = len(vector)
+
+        # posiciones[k] guarda de qué lugar original venía el estudiante que hoy está en k.
+        # Se mueve igual que el vector, para poder reordenar después la matriz de notas.
+        posiciones = []
+        for i in range(n):
+            posiciones.append(i)
+
         for i in range(n - 1):
             for j in range(n - 1 - i):
                 if vector[j].nombre.lower() > vector[j + 1].nombre.lower():
@@ -66,8 +77,14 @@ class GestionEstudiantes:
                     vector[j] = vector[j + 1]
                     vector[j + 1] = temporal
 
+                    temp_pos = posiciones[j]
+                    posiciones[j] = posiciones[j + 1]
+                    posiciones[j + 1] = temp_pos
+
         self.lista_simple = ListaSimple()
         self.lista_doble = ListaDoble()
         for estudiante in vector:
             self.lista_simple.agregar_al_final(estudiante)
             self.lista_doble.agregar_al_final(estudiante)
+
+        return posiciones

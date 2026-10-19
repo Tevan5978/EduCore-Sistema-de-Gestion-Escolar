@@ -56,6 +56,33 @@ class ListaDoble:
             actual = actual.anterior
         return valores
 
+    def buscar(self, codigo):
+        actual = self.cabeza
+        while actual is not None:
+            if actual.valor.codigo == codigo:
+                return actual.valor
+            actual = actual.siguiente
+        return None
+
+    def eliminar(self, codigo):
+        actual = self.cabeza
+        while actual is not None:
+            if actual.valor.codigo == codigo:
+                if actual.anterior is None:
+                    self.cabeza = actual.siguiente
+                else:
+                    actual.anterior.siguiente = actual.siguiente
+
+                if actual.siguiente is None:
+                    self.cola = actual.anterior
+                else:
+                    actual.siguiente.anterior = actual.anterior
+
+                self.tamano -= 1
+                return True
+            actual = actual.siguiente
+        return False
+
     def mostrar_estructura(self):
         # Diagnóstico: dibuja los nodos y sus enlaces en ambos sentidos.
         if self.cabeza is None:

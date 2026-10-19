@@ -10,10 +10,24 @@ class MatrizNotas:
 
     def agregar_estudiante(self):
         self.matriz.append([None] * self.asignaturas)
+
+    def eliminar_estudiante(self, fila):
+        # Quita la fila completa del estudiante; las de abajo suben una posición.
+        if fila < 0 or fila >= len(self.matriz):
+            return False
+        self.matriz.pop(fila)
+        return True
+
+    def reordenar(self, posiciones):
+        # Acomoda las filas en el nuevo orden que dejó el ordenamiento de estudiantes.
+        nueva_matriz = []
+        for posicion in posiciones:
+            nueva_matriz.append(self.matriz[posicion])
+        self.matriz = nueva_matriz
     
     def agregar_estudiante_al_inicio(self):
     # Fila nueva en la posición 0, para que coincida con un estudiante agregado al inicio.
-    self.matriz.insert(0, [None] * self.asignaturas)
+        self.matriz.insert(0, [None] * self.asignaturas)
 
     def cantidad_asignaturas(self):
         return self.asignaturas
