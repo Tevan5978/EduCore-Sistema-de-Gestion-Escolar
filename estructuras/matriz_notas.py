@@ -10,6 +10,10 @@ class MatrizNotas:
 
     def agregar_estudiante(self):
         self.matriz.append([None] * self.asignaturas)
+    
+    def agregar_estudiante_al_inicio(self):
+    # Fila nueva en la posición 0, para que coincida con un estudiante agregado al inicio.
+    self.matriz.insert(0, [None] * self.asignaturas)
 
     def cantidad_asignaturas(self):
         return self.asignaturas

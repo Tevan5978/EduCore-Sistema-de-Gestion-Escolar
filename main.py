@@ -32,6 +32,18 @@ def buscar_posicion_estudiante(gestion):
         return None
     return gestion.estudiantes.index(estudiante)
 
+def elegir_posicion():
+    print("¿Dónde desea registrar al estudiante?")
+    print("1. Al inicio de la lista")
+    print("2. Al final de la lista")
+    while True:
+        opcion = input("Seleccione 1 o 2: ").strip()
+        if opcion == "1":
+            return True
+        if opcion == "2":
+            return False
+        print("Opción inválida. Escriba 1 o 2.")
+
 
 def main():
     gestion = GestionEstudiantes()
@@ -42,18 +54,21 @@ def main():
         opcion = input("Seleccione una opción: ").strip()
 
         if opcion == "1":
+            al_inicio = elegir_posicion()
             codigo = input("Código: ").strip()
             nombre = input("Nombre completo: ").strip()
             edad = leer_entero("Edad: ")
             programa = input("Programa académico: ").strip()
 
             estudiante = Estudiante(codigo, nombre, edad, programa)
-            if gestion.registrar(estudiante):
-                notas.agregar_estudiante()
+            if gestion.registrar(estudiante, al_inicio):
+                if al_inicio:
+                    notas.agregar_estudiante_al_inicio()
+                else:
+                    notas.agregar_estudiante()
                 print("Estudiante registrado correctamente.")
             else:
                 print("No se pudo registrar. Revise que el código no esté repetido y los datos sean válidos.")
-
         elif opcion == "2":
             gestion.mostrar_todos()
 
