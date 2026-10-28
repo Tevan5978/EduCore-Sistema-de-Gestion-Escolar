@@ -2,6 +2,8 @@ from modelos.estudiante import Estudiante
 from servicios.gestion_estudiantes import GestionEstudiantes
 from estructuras.matriz_notas import MatrizNotas
 from servicios.gestion_historial import GestionHistorial
+from servicios.gestion_solicitudes import GestionSolicitudes #
+from interfaz.menu_fase3 import ejecutar_menu_fase3
 
 
 def mostrar_menu():
@@ -18,6 +20,7 @@ def mostrar_menu():
     print("10. Ver historial de acciones")
     print("11. Consultar la última acción")
     print("12. Retirar la última acción")
+    print("13. Solicitudes de estudiantes")
     print("0. Salir")
 
 
@@ -54,6 +57,7 @@ def main():
     gestion = GestionEstudiantes()
     notas = MatrizNotas()
     historial = GestionHistorial()
+    solicitudes = GestionSolicitudes()  # Inicialización de la gestión de solicitudes
 
     while True:
         mostrar_menu()
@@ -176,6 +180,9 @@ def main():
                 print(f"Acción retirada del historial: {retirada}")
                 print(f"Acciones restantes: {historial.cantidad()}")
 
+        elif opcion == "13":
+            ejecutar_menu_fase3(solicitudes, historial)
+            
         elif opcion == "0":
             print("Gracias por usar EduCore.")
             break
