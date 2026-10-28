@@ -4,7 +4,7 @@ Sistema de gestión escolar desarrollado en Python para apoyar la administració
 
 ## Descripción
 
-EduCore permite registrar estudiantes, consultar información, registrar notas por asignatura, calcular promedios, ordenar registros y analizar resultados básicos. La versión actual corresponde a la Fase 1 del proyecto.
+EduCore permite registrar estudiantes, consultar información, registrar notas por asignatura, calcular promedios, ordenar registros y analizar resultados básicos. La versión actual corresponde a la Fase 3 del proyecto.
 
 ## Objetivo general
 
