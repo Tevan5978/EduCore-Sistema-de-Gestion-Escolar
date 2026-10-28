@@ -1,6 +1,7 @@
 from modelos.estudiante import Estudiante
 from servicios.gestion_estudiantes import GestionEstudiantes
 from estructuras.matriz_notas import MatrizNotas
+from servicios.gestion_historial import GestionHistorial
 
 
 def mostrar_menu():
@@ -14,6 +15,9 @@ def mostrar_menu():
     print("7. Ordenar estudiantes por nombre")
     print("8. Mostrar estadísticas básicas")
     print("9. Eliminar estudiante")
+    print("10. Ver historial de acciones")
+    print("11. Consultar la última acción")
+    print("12. Retirar la última acción")
     print("0. Salir")
 
 
@@ -49,6 +53,7 @@ def elegir_posicion():
 def main():
     gestion = GestionEstudiantes()
     notas = MatrizNotas()
+    historial = GestionHistorial()
 
     while True:
         mostrar_menu()
@@ -67,6 +72,7 @@ def main():
                     notas.agregar_estudiante_al_inicio()
                 else:
                     notas.agregar_estudiante()
+                historial.registrar_accion(f"Registro del estudiante {codigo} - {nombre}")
                 print("Estudiante registrado correctamente.")
             else:
                 print("No se pudo registrar. Revise que el código no esté repetido y los datos sean válidos.")
@@ -104,6 +110,7 @@ def main():
                     print("La nota debe ser numérica.")
                     continue
                 if notas.registrar_nota(posicion, asignatura - 1, nota):
+                    historial.registrar_accion(f"Nota {nota} registrada a {gestion.estudiantes[posicion].nombre} (asignatura {asignatura})")
                     print("Nota registrada correctamente.")
                 else:
                     print("No se pudo registrar la nota. Debe estar entre 0.0 y 5.0.")
@@ -126,6 +133,7 @@ def main():
         elif opcion == "7":
             orden = gestion.ordenar_por_nombre()
             notas.reordenar(orden)
+            historial.registrar_accion("Ordenamiento de estudiantes por nombre")
             print("Estudiantes ordenados alfabéticamente.")
             gestion.mostrar_todos()
 
@@ -146,8 +154,28 @@ def main():
                 posicion = gestion.estudiantes.index(estudiante)
                 gestion.eliminar(codigo)
                 notas.eliminar_estudiante(posicion)
+                historial.registrar_accion(f"Eliminación del estudiante {codigo} - {estudiante.nombre}")
                 print("Estudiante eliminado correctamente.")
-                
+
+        elif opcion == "10":
+            historial.mostrar_historial()
+
+        elif opcion == "11":
+            ultima = historial.consultar_ultima()
+            if ultima is None:
+                print("No hay acciones registradas.")
+            else:
+                print(f"Última acción: {ultima}")
+                print(f"Acciones en el historial: {historial.cantidad()}")
+
+        elif opcion == "12":
+            retirada = historial.retirar_ultima()
+            if retirada is None:
+                print("No hay acciones para retirar.")
+            else:
+                print(f"Acción retirada del historial: {retirada}")
+                print(f"Acciones restantes: {historial.cantidad()}")
+
         elif opcion == "0":
             print("Gracias por usar EduCore.")
             break
