@@ -45,8 +45,8 @@ class Grafo:
         return self.vertices[nombre]
         
     def consultar_dependencias(self):
-    # Devuelve los nombres de todas las dependencias (los vértices del grafo).
-    return list(self.vertices.keys())
+        # Devuelve los nombres de todas las dependencias (los vértices del grafo).
+        return list(self.vertices.keys())
 
 
     def mostrar_grafo(self):
