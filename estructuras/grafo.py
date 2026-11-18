@@ -6,6 +6,10 @@ class Grafo:
         self.vertices = {}
 
     def agregar_dependencia(self, nombre):
+        nombre = nombre.strip()
+        if nombre == "":
+            print("El nombre de la dependencia no puede estar vacío.")
+            return False
         if nombre in self.vertices:
             print("La dependencia ya existe.")
             return False
@@ -15,6 +19,8 @@ class Grafo:
         return True
 
     def conectar(self, origen, destino):
+        origen = origen.strip()
+        destino = destino.strip()
         if origen not in self.vertices:
             print("La dependencia de origen no existe.")
             return False

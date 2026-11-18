@@ -4,6 +4,8 @@ from estructuras.matriz_notas import MatrizNotas
 from servicios.gestion_historial import GestionHistorial
 from servicios.gestion_solicitudes import GestionSolicitudes #
 from servicios.gestion_arbol_estudiantes import GestionArbolEstudiantes
+from estructuras.grafo import Grafo
+from servicios.recorridos_grafo import RecorridosGrafo
 from interfaz.menu_fase3 import ejecutar_menu_fase3
 from interfaz.menu_grafo import ejecutar_menu_grafo
 from interfaz.menu_arbol import ejecutar_menu_arbol
@@ -64,6 +66,15 @@ def main():
     historial = GestionHistorial()
     solicitudes = GestionSolicitudes()  # Inicialización de la gestión de solicitudes
     gestion_arbol = GestionArbolEstudiantes()
+    grafo = Grafo()
+    recorridos = RecorridosGrafo(grafo)
+
+    for dependencia in ("Porteria", "Biblioteca", "Salones", "Enfermeria", "Cafeteria"):
+        grafo.agregar_dependencia(dependencia)
+    grafo.conectar("Porteria", "Biblioteca")
+    grafo.conectar("Porteria", "Salones")
+    grafo.conectar("Biblioteca", "Cafeteria")
+    grafo.conectar("Salones", "Enfermeria")
 
     while True:
         mostrar_menu()
@@ -192,10 +203,10 @@ def main():
             ejecutar_menu_fase3(solicitudes, historial)
 
         elif opcion == "14":
-            ejecutar_menu_grafo()
+            ejecutar_menu_grafo(grafo, recorridos)
 
         elif opcion == "15":
-            ejecutar_menu_arbol(gestion_arbol)
+            ejecutar_menu_arbol(gestion, gestion_arbol, notas, historial)
             
         elif opcion == "0":
             print("Gracias por usar EduCore.")

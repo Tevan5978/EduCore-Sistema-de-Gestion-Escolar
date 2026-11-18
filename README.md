@@ -60,6 +60,11 @@ py main.py
 - `modelos/estudiante.py`: clase `Estudiante`.
 - `servicios/gestion_estudiantes.py`: lógica de gestión, búsqueda y ordenamiento.
 - `estructuras/matriz_notas.py`: matriz de notas.
+- `estructuras/arbol_binario.py`: árbol binario de estudiantes.
+- `estructuras/grafo.py`: grafo no dirigido de dependencias.
+- `servicios/recorridos_grafo.py`: recorridos BFS, DFS y búsqueda de rutas.
+- `interfaz/menu_arbol.py`: menú del árbol binario.
+- `interfaz/menu_grafo.py`: menú del grafo.
 - `pruebas/test_fase1.py`: pruebas de la fase 1.
 - `docs/`: documentación del proceso y uso de IA.
 

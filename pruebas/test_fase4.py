@@ -53,6 +53,16 @@ class TestGrafoEduCore(unittest.TestCase):
             self.recorridos.buscar_ruta("Aula", "Enfermeria")
         )
 
+    def test_rechazar_nombre_vacio(self):
+        self.assertFalse(self.grafo.agregar_dependencia("   "))
+        self.assertFalse(self.grafo.existe_dependencia(""))
+
+    def test_conectar_recorta_espacios(self):
+        self.grafo.agregar_dependencia("Nueva")
+        self.assertTrue(
+            self.grafo.conectar(" Nueva ", " Porteria ")
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

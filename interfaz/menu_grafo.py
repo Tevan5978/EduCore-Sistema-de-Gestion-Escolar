@@ -13,21 +13,20 @@ def mostrar_menu_grafo():
     print("7. Buscar ruta")
 
 
-def ejecutar_menu_grafo():
-    grafo = Grafo()
-
-    grafo.agregar_dependencia("Porteria")
-    grafo.agregar_dependencia("Biblioteca")
-    grafo.agregar_dependencia("Salones")
-    grafo.agregar_dependencia("Enfermeria")
-    grafo.agregar_dependencia("Cafeteria")
-
-    grafo.conectar("Porteria", "Biblioteca")
-    grafo.conectar("Porteria", "Salones")
-    grafo.conectar("Biblioteca", "Cafeteria")
-    grafo.conectar("Salones", "Enfermeria")
-
-    recorridos = RecorridosGrafo(grafo)
+def ejecutar_menu_grafo(grafo=None, recorridos=None):
+    if grafo is None:
+        grafo = Grafo()
+        grafo.agregar_dependencia("Porteria")
+        grafo.agregar_dependencia("Biblioteca")
+        grafo.agregar_dependencia("Salones")
+        grafo.agregar_dependencia("Enfermeria")
+        grafo.agregar_dependencia("Cafeteria")
+        grafo.conectar("Porteria", "Biblioteca")
+        grafo.conectar("Porteria", "Salones")
+        grafo.conectar("Biblioteca", "Cafeteria")
+        grafo.conectar("Salones", "Enfermeria")
+    if recorridos is None:
+        recorridos = RecorridosGrafo(grafo)
 
     while True:
         mostrar_menu_grafo()

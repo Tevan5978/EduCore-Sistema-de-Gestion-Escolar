@@ -9,7 +9,7 @@ def mostrar_menu_arbol():
     print("0. Volver al menú principal")
 
 
-def ejecutar_menu_arbol(gestion_arbol):
+def ejecutar_menu_arbol(gestion, gestion_arbol, notas, historial):
     while True:
         mostrar_menu_arbol()
         opcion = input("Seleccione una opción: ").strip()
@@ -29,10 +29,18 @@ def ejecutar_menu_arbol(gestion_arbol):
             except ValueError:
                 print("La edad debe ser un número entero.")
                 continue
+            if edad <= 0:
+                print("La edad debe ser mayor que cero.")
+                continue
 
             estudiante = Estudiante(codigo, nombre, edad, programa)
-            if gestion_arbol.insertar(estudiante):
-                print("Estudiante insertado en el árbol.")
+            if gestion.registrar(estudiante):
+                gestion_arbol.insertar(estudiante)
+                notas.agregar_estudiante()
+                historial.registrar_accion(
+                    f"Registro del estudiante {codigo} - {nombre}"
+                )
+                print("Estudiante registrado y insertado en el árbol.")
             else:
                 print("Ya existe un estudiante con ese código.")
 
