@@ -63,6 +63,18 @@ class TestGrafoEduCore(unittest.TestCase):
             self.grafo.conectar(" Nueva ", " Porteria ")
         )
 
+    def test_eliminar_dependencia_desconecta_vecinos(self):
+        self.assertTrue(
+            self.grafo.eliminar_dependencia("Porteria")
+        )
+        self.assertFalse(
+            self.grafo.existe_dependencia("Porteria")
+        )
+        self.assertNotIn(
+            "Porteria",
+            self.grafo.consultar_vecinos("Biblioteca"),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

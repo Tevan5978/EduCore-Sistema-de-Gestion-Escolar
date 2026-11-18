@@ -16,7 +16,11 @@ class GestionEstudiantes:
         return self.lista_doble.recorrer_adelante()
 
     def registrar(self, estudiante, al_inicio=False):
-        if estudiante.codigo == "" or estudiante.nombre.strip() == "":
+        codigo = estudiante.codigo.strip()
+        estudiante.codigo = codigo
+        if codigo == "" or not codigo.isalnum():
+            return False
+        if estudiante.nombre.strip() == "":
             return False
         if estudiante.edad <= 0:
             return False

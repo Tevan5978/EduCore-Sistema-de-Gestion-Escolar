@@ -91,3 +91,29 @@ class ArbolBinario:
 
         self.cantidad -= 1
         return True
+
+    def recorrido_inorden(self):
+        resultado = []
+
+        def recorrer(nodo):
+            if nodo is None:
+                return
+            recorrer(nodo.izquierda)
+            resultado.append(nodo.informacion)
+            recorrer(nodo.derecha)
+
+        recorrer(self.raiz)
+        return resultado
+
+    def recorrido_preorden(self):
+        resultado = []
+
+        def recorrer(nodo):
+            if nodo is None:
+                return
+            resultado.append(nodo.informacion)
+            recorrer(nodo.izquierda)
+            recorrer(nodo.derecha)
+
+        recorrer(self.raiz)
+        return resultado

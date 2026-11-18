@@ -17,6 +17,15 @@ class PruebasFase1(unittest.TestCase):
         gestion.registrar(Estudiante("E001", "Ana Pérez", 18, "Matemáticas"))
         self.assertFalse(gestion.registrar(Estudiante("E001", "Luis Díaz", 19, "Sistemas")))
 
+    def test_codigo_alfanumerico_y_rechazo_de_simbolos(self):
+        gestion = GestionEstudiantes()
+        self.assertTrue(
+            gestion.registrar(Estudiante("E123", "Ana Pérez", 18, "Matemáticas"))
+        )
+        self.assertFalse(
+            gestion.registrar(Estudiante("E-124", "Luis Díaz", 19, "Sistemas"))
+        )
+
     def test_matriz_y_promedio(self):
         notas = MatrizNotas()
         notas.agregar_estudiante()

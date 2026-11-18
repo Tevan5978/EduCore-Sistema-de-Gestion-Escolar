@@ -6,6 +6,9 @@ def mostrar_menu_arbol():
     print("1. Insertar estudiante")
     print("2. Buscar estudiante por código")
     print("3. Mostrar cantidad de estudiantes")
+    print("4. Eliminar estudiante")
+    print("5. Mostrar recorrido en orden")
+    print("6. Mostrar recorrido preorden")
     print("0. Volver al menú principal")
 
 
@@ -22,6 +25,9 @@ def ejecutar_menu_arbol(gestion, gestion_arbol, notas, historial):
 
             if not codigo or not nombre or not edad or not programa:
                 print("Todos los datos son obligatorios.")
+                continue
+            if not codigo.isalnum():
+                print("El código solo puede contener letras y números.")
                 continue
 
             try:
@@ -54,6 +60,41 @@ def ejecutar_menu_arbol(gestion, gestion_arbol, notas, historial):
 
         elif opcion == "3":
             print(f"Estudiantes almacenados en el árbol: {gestion_arbol.arbol.cantidad}")
+
+        elif opcion == "4":
+            codigo = input("Código del estudiante a eliminar: ").strip()
+            if gestion_arbol.buscar(codigo) is None:
+                print("No se encontró un estudiante con ese código.")
+                continue
+
+            posicion = gestion.estudiantes.index(
+                gestion.buscar(codigo)
+            )
+            if gestion.eliminar(codigo):
+                gestion_arbol.eliminar(codigo)
+                notas.eliminar_estudiante(posicion)
+                historial.registrar_accion(
+                    f"Eliminación del estudiante {codigo}"
+                )
+                print("Estudiante eliminado del sistema y del árbol.")
+
+        elif opcion == "5":
+            estudiantes = gestion_arbol.arbol.recorrido_inorden()
+            if not estudiantes:
+                print("El árbol no tiene estudiantes.")
+            else:
+                print("Recorrido en orden:")
+                for estudiante in estudiantes:
+                    print(estudiante)
+
+        elif opcion == "6":
+            estudiantes = gestion_arbol.arbol.recorrido_preorden()
+            if not estudiantes:
+                print("El árbol no tiene estudiantes.")
+            else:
+                print("Recorrido preorden:")
+                for estudiante in estudiantes:
+                    print(estudiante)
 
         elif opcion == "0":
             break

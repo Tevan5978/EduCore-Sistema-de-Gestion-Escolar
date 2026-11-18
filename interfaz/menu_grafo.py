@@ -9,8 +9,9 @@ def mostrar_menu_grafo():
     print("3. Conectar dependencias")
     print("4. Recorrido BFS")
     print("5. Recorrido DFS")
-    print("6. Salir")
-    print("7. Buscar ruta")
+    print("6. Buscar ruta")
+    print("7. Eliminar dependencia")
+    print("0. Volver al menú principal")
 
 
 def ejecutar_menu_grafo(grafo=None, recorridos=None):
@@ -51,8 +52,6 @@ def ejecutar_menu_grafo(grafo=None, recorridos=None):
             inicio = input("Dependencia inicial: ").strip()
             print(recorridos.dfs(inicio))
         elif opcion == "6":
-            break
-        elif opcion == "7":
             origen = input("Dependencia de origen: ").strip()
             destino = input("Dependencia de destino: ").strip()
             ruta = recorridos.buscar_ruta(origen, destino)
@@ -60,5 +59,10 @@ def ejecutar_menu_grafo(grafo=None, recorridos=None):
                 print(" -> ".join(ruta))
             else:
                 print("No existe una ruta.")
+        elif opcion == "7":
+            nombre = input("Dependencia a eliminar: ").strip()
+            grafo.eliminar_dependencia(nombre)
+        elif opcion == "0":
+            break
         else:
             print("Opción inválida. Intente de nuevo.")

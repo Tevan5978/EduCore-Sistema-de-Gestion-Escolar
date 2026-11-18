@@ -54,3 +54,16 @@ class Grafo:
 
     def existe_dependencia(self, nombre):
         return nombre in self.vertices
+
+    def eliminar_dependencia(self, nombre):
+        nombre = nombre.strip()
+        if nombre not in self.vertices:
+            print("La dependencia no existe.")
+            return False
+
+        for vecino in self.vertices[nombre]:
+            if nombre in self.vertices[vecino]:
+                self.vertices[vecino].remove(nombre)
+        del self.vertices[nombre]
+        print("Dependencia eliminada correctamente.")
+        return True

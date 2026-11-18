@@ -71,6 +71,15 @@ class PruebasArbolBinario(unittest.TestCase):
         self.assertIsNone(gestion.buscar("E002"))
         self.assertEqual(gestion.arbol.cantidad, 2)
 
+    def test_recorridos_inorden_y_preorden(self):
+        arbol = ArbolBinario()
+        arbol.insertar("E002", "Carlos")
+        arbol.insertar("E001", "Ana")
+        arbol.insertar("E003", "Laura")
+
+        self.assertEqual(arbol.recorrido_inorden(), ["Ana", "Carlos", "Laura"])
+        self.assertEqual(arbol.recorrido_preorden(), ["Carlos", "Ana", "Laura"])
+
 
 if __name__ == "__main__":
     unittest.main()
