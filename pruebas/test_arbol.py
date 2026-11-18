@@ -60,6 +60,17 @@ class PruebasArbolBinario(unittest.TestCase):
         self.assertIsNone(gestion.buscar("E002"))
         self.assertEqual(gestion.arbol.cantidad, 1)
 
+    def test_eliminar_estudiante_del_arbol(self):
+        gestion = GestionArbolEstudiantes()
+        gestion.insertar(Estudiante("E002", "Carlos", 19, "Sistemas"))
+        gestion.insertar(Estudiante("E001", "Ana", 18, "Matemáticas"))
+        gestion.insertar(Estudiante("E003", "Laura", 20, "Derecho"))
+
+        self.assertTrue(gestion.eliminar("E002"))
+        self.assertFalse(gestion.eliminar("E002"))
+        self.assertIsNone(gestion.buscar("E002"))
+        self.assertEqual(gestion.arbol.cantidad, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

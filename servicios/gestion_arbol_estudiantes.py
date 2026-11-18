@@ -10,3 +10,6 @@ class GestionArbolEstudiantes:
 
     def buscar(self, codigo):
         return self.arbol.buscar(codigo)
+
+    def eliminar(self, codigo):
+        return self.arbol.eliminar(codigo)

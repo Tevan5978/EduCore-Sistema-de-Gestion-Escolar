@@ -3,8 +3,10 @@ from servicios.gestion_estudiantes import GestionEstudiantes
 from estructuras.matriz_notas import MatrizNotas
 from servicios.gestion_historial import GestionHistorial
 from servicios.gestion_solicitudes import GestionSolicitudes #
+from servicios.gestion_arbol_estudiantes import GestionArbolEstudiantes
 from interfaz.menu_fase3 import ejecutar_menu_fase3
 from interfaz.menu_grafo import ejecutar_menu_grafo
+from interfaz.menu_arbol import ejecutar_menu_arbol
 
 
 def mostrar_menu():
@@ -23,6 +25,7 @@ def mostrar_menu():
     print("12. Retirar la última acción")
     print("13. Solicitudes de estudiantes")
     print("14. Dependencias y recorridos")
+    print("15. Árbol binario de estudiantes")
     print("0. Salir")
 
 
@@ -60,6 +63,7 @@ def main():
     notas = MatrizNotas()
     historial = GestionHistorial()
     solicitudes = GestionSolicitudes()  # Inicialización de la gestión de solicitudes
+    gestion_arbol = GestionArbolEstudiantes()
 
     while True:
         mostrar_menu()
@@ -74,6 +78,7 @@ def main():
 
             estudiante = Estudiante(codigo, nombre, edad, programa)
             if gestion.registrar(estudiante, al_inicio):
+                gestion_arbol.insertar(estudiante)
                 if al_inicio:
                     notas.agregar_estudiante_al_inicio()
                 else:
@@ -159,6 +164,7 @@ def main():
             else:
                 posicion = gestion.estudiantes.index(estudiante)
                 gestion.eliminar(codigo)
+                gestion_arbol.eliminar(codigo)
                 notas.eliminar_estudiante(posicion)
                 historial.registrar_accion(f"Eliminación del estudiante {codigo} - {estudiante.nombre}")
                 print("Estudiante eliminado correctamente.")
@@ -187,6 +193,9 @@ def main():
 
         elif opcion == "14":
             ejecutar_menu_grafo()
+
+        elif opcion == "15":
+            ejecutar_menu_arbol(gestion_arbol)
             
         elif opcion == "0":
             print("Gracias por usar EduCore.")
