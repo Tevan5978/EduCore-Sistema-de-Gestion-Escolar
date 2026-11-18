@@ -1,5 +1,6 @@
 from estructuras.grafo import Grafo
 from servicios.recorridos_grafo import RecorridosGrafo
+from servicios.gestion_dependencias import GestionDependencias
 
 
 def mostrar_menu_grafo():
@@ -11,6 +12,8 @@ def mostrar_menu_grafo():
     print("5. Recorrido DFS")
     print("6. Buscar ruta")
     print("7. Eliminar dependencia")
+    print("8. Ver vecinos de una dependencia")
+    print("9. Listar dependencias")
     print("0. Volver al menú principal")
 
 
@@ -28,6 +31,8 @@ def ejecutar_menu_grafo(grafo=None, recorridos=None):
         grafo.conectar("Salones", "Enfermeria")
     if recorridos is None:
         recorridos = RecorridosGrafo(grafo)
+    dependencias = GestionDependencias(grafo)
+
 
     while True:
         mostrar_menu_grafo()
@@ -62,6 +67,12 @@ def ejecutar_menu_grafo(grafo=None, recorridos=None):
         elif opcion == "7":
             nombre = input("Dependencia a eliminar: ").strip()
             grafo.eliminar_dependencia(nombre)
+        elif opcion == "8":
+            nombre = input("Dependencia: ").strip()
+            dependencias.mostrar_vecinos(nombre)
+        elif opcion == "9":
+            dependencias.mostrar_dependencias()
+
         elif opcion == "0":
             break
         else:
