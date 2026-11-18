@@ -4,6 +4,7 @@ from estructuras.matriz_notas import MatrizNotas
 from servicios.gestion_historial import GestionHistorial
 from servicios.gestion_solicitudes import GestionSolicitudes #
 from interfaz.menu_fase3 import ejecutar_menu_fase3
+from interfaz.menu_grafo import ejecutar_menu_grafo
 
 
 def mostrar_menu():
@@ -21,6 +22,7 @@ def mostrar_menu():
     print("11. Consultar la última acción")
     print("12. Retirar la última acción")
     print("13. Solicitudes de estudiantes")
+    print("14. Dependencias y recorridos")
     print("0. Salir")
 
 
@@ -182,6 +184,9 @@ def main():
 
         elif opcion == "13":
             ejecutar_menu_fase3(solicitudes, historial)
+
+        elif opcion == "14":
+            ejecutar_menu_grafo()
             
         elif opcion == "0":
             print("Gracias por usar EduCore.")
