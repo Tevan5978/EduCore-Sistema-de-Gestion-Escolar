@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Árboles y grafos - EduCore</title>
+  <style>
+    :root {
+      --navy: #122b44;
+      --blue: #236eb4;
+      --teal: #279c8c;
+      --orange: #dc8533;
+      --light: #eff5f9;
+      --ink: #24313f;
+      --muted: #66707b;
+      --line: #ccd7df;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: #edf3f7;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 252px 1fr;
+      height: 100vh;
+    }
+
+    aside {
+      background: var(--navy);
+      color: white;
+      padding: 28px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .brand {
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      padding: 0 8px 18px;
+      margin-bottom: 16px;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 21px;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 5px;
+      color: #afc9d6;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .menu button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #d9e7ef;
+      text-align: left;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 2px 0;
+      cursor: pointer;
+      font: 600 13px "Segoe UI", sans-serif;
+    }
+
+    .menu button:hover { background: rgba(255,255,255,.08); }
+
+    .menu button.active {
+      background: var(--teal);
+      color: white;
+    }
+
+    .menu-progress {
+      margin-top: auto;
+      padding: 14px 8px 0;
+      color: #b7cad5;
+      font-size: 12px;
+    }
+
+    main {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 44px 58px 74px;
+      overflow-y: auto;
+      background: #f7fafc;
+      opacity: 0;
+      transform: translateX(28px);
+      visibility: hidden;
+      transition: opacity .24s ease, transform .24s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--teal);
+    }
+
+    .section-label {
+      color: var(--teal);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      color: var(--navy);
+      margin: 0 0 8px;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.05;
+    }
+
+    h2 {
+      color: var(--navy);
+      margin: 0 0 8px;
+      font-size: clamp(28px, 3.2vw, 42px);
+    }
+
+    h3 {
+      color: var(--navy);
+      margin: 0 0 10px;
+    }
+
+    .source {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .cover {
+      min-height: calc(100vh - 118px);
+      display: grid;
+      align-content: center;
+      max-width: 900px;
+    }
+
+    .cover h1 {
+      font-size: clamp(54px, 8vw, 88px);
+    }
+
+    .cover p {
+      max-width: 720px;
+      font-size: 21px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(18,43,68,.06);
+    }
+
+    .card p, .card li {
+      line-height: 1.55;
+    }
+
+    pre {
+      margin: 0;
+      overflow: auto;
+      max-height: 430px;
+      background: var(--navy);
+      color: #f7fbfd;
+      border-radius: 12px;
+      padding: 20px;
+      line-height: 1.48;
+      font-size: 13px;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 12px;
+      align-items: start;
+      margin: 12px 0;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--teal);
+      color: white;
+      font-weight: 800;
+    }
+
+    .step p {
+      margin: 5px 0 0;
+      line-height: 1.5;
+    }
+
+    .callout {
+      border-left: 5px solid var(--teal);
+      background: #edf8f5;
+      border-radius: 8px;
+      padding: 14px 18px;
+      line-height: 1.55;
+    }
+
+    .diagram {
+      min-height: 330px;
+      background: var(--light);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+    }
+
+    .tree {
+      display: grid;
+      justify-items: center;
+      gap: 24px;
+    }
+
+    .nodes-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 70px;
+    }
+
+    .node {
+      min-width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--navy);
+      color: white;
+      font-weight: 800;
+      border: 5px solid #d9e6ed;
+    }
+
+    .node.teal { background: var(--teal); }
+    .node.blue { background: var(--blue); }
+    .node.orange { background: var(--orange); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--navy);
+      color: white;
+    }
+
+    .controls {
+      position: fixed;
+      right: 28px;
+      bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 30;
+    }
+
+    .controls button {
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      color: var(--navy);
+      padding: 0 14px;
+      cursor: pointer;
+      font-weight: 800;
+      box-shadow: 0 5px 18px rgba(18,43,68,.10);
+    }
+
+    .controls button:disabled {
+      opacity: .45;
+      cursor: default;
+    }
+
+    .counter {
+      min-width: 72px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .keyboard {
+      position: fixed;
+      left: 270px;
+      bottom: 28px;
+      color: var(--muted);
+      font-size: 12px;
+      z-index: 30;
+    }
+
+    @media (max-width: 760px) {
+      body { overflow: hidden; }
+      .app { grid-template-columns: 1fr; }
+      aside {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 62px;
+        padding: 10px;
+        flex-direction: row;
+        align-items: center;
+      }
+      .brand {
+        border: 0;
+        padding: 0 8px;
+        margin: 0;
+        min-width: 145px;
+      }
+      .brand strong { font-size: 16px; }
+      .brand span, .menu-progress { display: none; }
+      .menu { display: flex; overflow-x: auto; }
+      .menu button {
+        width: auto;
+        white-space: nowrap;
+        padding: 8px 10px;
+      }
+      main { height: 100vh; padding-top: 62px; }
+      .slide { padding: 82px 20px 78px; }
+      .grid, .grid.three { grid-template-columns: 1fr; }
+      .nodes-row { gap: 18px; }
+      .node { min-width: 62px; height: 62px; }
+      .keyboard { display: none; }
+      .controls { right: 12px; bottom: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <strong>EduCore</strong>
+        <span>Documentación técnica</span>
+      </div>
+      <div class="menu" id="menu">
+        <button class="active" data-slide="0">1 · Portada</button>
+        <button data-slide="1">2 · Concepto general</button>
+        <button data-slide="2">3 · Nodo y raíz</button>
+        <button data-slide="3">4 · Insertar</button>
+        <button data-slide="4">5 · Buscar</button>
+        <button data-slide="5">6 · Eliminar árbol</button>
+        <button data-slide="6">7 · Recorridos árbol</button>
+        <button data-slide="7">8 · Gestión del árbol</button>
+        <button data-slide="8">9 · Menú del árbol</button>
+        <button data-slide="9">10 · Grafo</button>
+        <button data-slide="10">11 · Conectar y eliminar</button>
+        <button data-slide="11">12 · BFS</button>
+        <button data-slide="12">13 · DFS</button>
+        <button data-slide="13">14 · Buscar ruta</button>
+        <button data-slide="14">15 · Integración</button>
+        <button data-slide="15">16 · Complejidades</button>
+      </div>
+      <div class="menu-progress" id="menuProgress">Ventana 1 de 16</div>
+    </aside>
+
+    <main id="presentation">
+      <section class="slide active">
+        <div class="cover">
+          <div class="section-label">EduCore · Documentación técnica</div>
+          <h1>Árboles y grafos</h1>
+          <p>Explicación paso a paso de estructuras, operaciones, recorridos, rutas e integración con el sistema.</p>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Visión general</div>
+        <h2>Concepto general</h2>
+        <span class="source">Cómo se conectan las dos estructuras</span>
+        <div class="grid three">
+          <article class="card">
+            <h3>Árbol binario</h3>
+            <p>Organiza estudiantes por código.</p>
+            <ul>
+              <li>Menor: izquierda.</li>
+              <li>Mayor: derecha.</li>
+              <li>Búsqueda jerárquica.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Grafo</h3>
+            <p>Representa dependencias institucionales.</p>
+            <ul>
+              <li>Lista de adyacencia.</li>
+              <li>Conexiones no dirigidas.</li>
+              <li>BFS, DFS y rutas.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Integración</h3>
+            <p>Las estructuras se mantienen activas dentro de EduCore y se usan desde sus respectivos menús.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Árbol · Nodo</div>
+        <h2>Nodo y estado inicial</h2>
+        <span class="source">estructuras/arbol_binario.py — líneas 1-15</span>
+        <div class="grid">
+          <pre><code>class Nodo:
+    def __init__(self, codigo, informacion):
+        self.codigo = codigo
+        self.informacion = informacion
+        self.izquierda = None
+        self.derecha = None
+
+class ArbolBinario:
+    def __init__(self):
+        self.raiz = None
+        self.cantidad = 0
+
+    def esta_vacio(self):
+        return self.raiz is None</code></pre>
+          <div>
+            <article class="card">
+              <h3>Datos del Nodo</h3>
+              <ul>
+                <li><code>codigo</code>: clave de búsqueda.</li>
+                <li><code>informacion</code>: objeto Estudiante.</li>
+                <li><code>izquierda</code>: códigos menores.</li>
+                <li><code>derecha</code>: códigos mayores.</li>
+              </ul>
+            </article>
+            <article class="card" style="margin-top:18px">
+              <h3>Estado inicial</h3>
+              <p><code>raiz</code> es <code>None</code>. <code>cantidad</code> comienza en cero.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Árbol · Inserción</div>
+        <h2>Insertar un estudiante</h2>
+        <span class="source">estructuras/arbol_binario.py — insertar()</span>
+        <div class="grid">
+          <pre><code>def insertar(self, codigo, informacion):
+    nuevo = Nodo(codigo, informacion)
+
+    if self.raiz is None:
+        self.raiz = nuevo
+        self.cantidad += 1
+        return True
+
+    actual = self.raiz
+    while actual is not None:
+        if codigo == actual.codigo:
+            return False
+        if codigo < actual.codigo:
+            if actual.izquierda is None:
+                actual.izquierda = nuevo
+                self.cantidad += 1
+                return True
+            actual = actual.izquierda
+        else:
+            if actual.derecha is None:
+                actual.derecha = nuevo
+                self.cantidad += 1
+                return True
+            actual = actual.derecha</code></pre>
+          <div>
+            <div class="step"><div class="step-number">1</div><p>Crea el nodo con código e información.</p></div>
+            <div class="step"><div class="step-number">2</div><p>Si no existe raíz, convierte el nodo en raíz.</p></div>
+            <div class="step"><div class="step-number">3</div><p>Si el código ya existe, devuelve <code>False</code>.</p></div>
+            <div class="step"><div class="step-number">4</div><p>Código menor: izquierda. Código mayor: derecha.</p></div>
+            <div class="step"><div class="step-number">5</div><p>Cuando encuentra una posición libre, inserta e incrementa la cantidad.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Árbol · Búsqueda</div>
+        <h2>Buscar un estudiante</h2>
+        <span class="source">estructuras/arbol_binario.py — buscar()</span>
+        <div class="grid">
+          <pre><code>actual = self.raiz
+while actual is not None:
+    if codigo == actual.codigo:
+        return actual.informacion
+    if codigo < actual.codigo:
+        actual = actual.izquierda
+    else:
+        actual = actual.derecha
+return None</code></pre>
+          <div>
+            <div class="step"><div class="step-number">1</div><p>Empieza desde la raíz.</p></div>
+            <div class="step"><div class="step-number">2</div><p>Compara el código buscado con el nodo actual.</p></div>
+            <div class="step"><div class="step-number">3</div><p>Menor: rama izquierda. Mayor: rama derecha.</p></div>
+            <div class="step"><div class="step-number">4</div><p>Coincidencia: devuelve Estudiante. <code>None</code>: no existe.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Árbol · Eliminación</div>
+        <h2>Eliminar un nodo</h2>
+        <span class="source">estructuras/arbol_binario.py — eliminar()</span>
+        <div class="grid three">
+          <article class="card">
+            <h3>Hoja</h3>
+            <p>Sin hijos. El padre elimina su enlace.</p>
+          </article>
+          <article class="card">
+            <h3>Un hijo</h3>
+            <p>El hijo sustituye directamente al nodo eliminado.</p>
+          </article>
+          <article class="card">
+            <h3>Dos hijos</h3>
+            <p>Busca el sucesor inmediato: derecha y luego todas las izquierdas posibles.</p>
+          </article>
+        </div>
+        <pre style="margin-top:18px"><code>sucesor = actual.derecha
+while sucesor.izquierda is not None:
+    sucesor = sucesor.izquierda
+
+actual.codigo = sucesor.codigo
+actual.informacion = sucesor.informacion
+# Elimina físicamente el sucesor y reconecta sus hijos</code></pre>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Árbol · Recorridos</div>
+        <h2>Recorrido inorden y preorden</h2>
+        <span class="source">La recursividad usa automáticamente una pila de llamadas</span>
+        <div class="grid">
+          <article class="card">
+            <h3>Inorden</h3>
+            <pre><code>recorrer(nodo.izquierda)
+resultado.append(nodo.informacion)
+recorrer(nodo.derecha)</code></pre>
+            <p><strong>Orden:</strong> izquierda → nodo → derecha.</p>
+            <p>Devuelve los códigos ordenados de menor a mayor.</p>
+          </article>
+          <article class="card">
+            <h3>Preorden</h3>
+            <pre><code>resultado.append(nodo.informacion)
+recorrer(nodo.izquierda)
+recorrer(nodo.derecha)</code></pre>
+            <p><strong>Orden:</strong> nodo → izquierda → derecha.</p>
+            <p>Visita primero la raíz y después sus ramas.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Árbol · Servicio</div>
+        <h2>Puente entre árbol y estudiante</h2>
+        <span class="source">servicios/gestion_arbol_estudiantes.py</span>
+        <div class="grid">
+          <pre><code>class GestionArbolEstudiantes:
+    def __init__(self):
+        self.arbol = ArbolBinario()
+
+    def insertar(self, estudiante):
+        return self.arbol.insertar(
+            estudiante.codigo, estudiante)
+
+    def buscar(self, codigo):
+        return self.arbol.buscar(codigo)
+
+    def eliminar(self, codigo):
+        return self.arbol.eliminar(codigo)</code></pre>
+          <div class="card">
+            <h3>Responsabilidad</h3>
+            <p>El servicio conecta objetos <code>Estudiante</code> con <code>ArbolBinario</code>.</p>
+            <ul>
+              <li>Crea una instancia del árbol.</li>
+              <li>Usa el código como clave.</li>
+              <li>Delega insertar, buscar y eliminar.</li>
+              <li>Guarda el objeto completo como información.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Árbol · Interfaz</div>
+        <h2>Menú del árbol</h2>
+        <span class="source">interfaz/menu_arbol.py</span>
+        <div class="grid">
+          <pre><code>codigo = input("Código: ").strip()
+nombre = input("Nombre completo: ").strip()
+edad = input("Edad: ").strip()
+programa = input("Programa académico: ").strip()
+
+if not codigo.isalnum():
+    print("Solo letras y números.")
+    continue
+
+edad = int(edad)
+if edad <= 0:
+    print("La edad debe ser mayor que cero.")
+    continue</code></pre>
+          <div>
+            <article class="card">
+              <h3>Inserción sincronizada</h3>
+              <div class="callout">
+                El registro se agrega a las listas, al árbol, a la matriz de notas y al historial.
+              </div>
+            </article>
+            <article class="card" style="margin-top:18px">
+              <h3>Opciones del menú</h3>
+              <ol>
+                <li>Insertar estudiante.</li>
+                <li>Buscar por código.</li>
+                <li>Mostrar cantidad.</li>
+                <li>Eliminar estudiante.</li>
+                <li>Mostrar inorden.</li>
+                <li>Mostrar preorden.</li>
+              </ol>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Grafo · Representación</div>
+        <h2>Grafo de dependencias</h2>
+        <span class="source">estructuras/grafo.py</span>
+        <div class="grid">
+          <article class="card">
+            <h3>Lista de adyacencia</h3>
+            <pre><code>{
+ "Porteria": ["Biblioteca", "Salones"],
+ "Biblioteca": ["Porteria", "Cafeteria"],
+ "Salones": ["Porteria", "Enfermeria"],
+ "Enfermeria": ["Salones"],
+ "Cafeteria": ["Biblioteca"]
+}</code></pre>
+          </article>
+          <article class="card">
+            <h3>Concepto</h3>
+            <p>La clave representa un vértice.</p>
+            <p>La lista representa sus vecinos.</p>
+            <div class="callout">
+              Conexión no dirigida:
+              cada vértice guarda al otro como vecino.
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Grafo · Operaciones</div>
+        <h2>Conectar y eliminar dependencias</h2>
+        <span class="source">estructuras/grafo.py</span>
+        <div class="grid">
+          <article class="card">
+            <h3>Agregar una conexión</h3>
+            <pre><code>self.vertices[origen].append(destino)
+self.vertices[destino].append(origen)</code></pre>
+            <p>Se agregan ambos enlaces, por eso el grafo es no dirigido.</p>
+          </article>
+          <article class="card">
+            <h3>Eliminar una dependencia</h3>
+            <pre><code>for vecino in self.vertices[nombre]:
+    self.vertices[vecino].remove(nombre)
+del self.vertices[nombre]</code></pre>
+            <p>Primero elimina los enlaces entrantes y después borra la clave.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Grafo · BFS</div>
+        <h2>Búsqueda en amplitud</h2>
+        <span class="source">servicios/recorridos_grafo.py — bfs()</span>
+        <div class="grid">
+          <pre><code>visitados = []
+cola = Cola()
+cola.encolar(inicio)
+visitados.append(inicio)
+
+while not cola.esta_vacia():
+    actual = cola.desencolar()
+    for vecino in consultar_vecinos(actual):
+        if vecino not in visitados:
+            visitados.append(vecino)
+            cola.encolar(vecino)
+
+return visitados</code></pre>
+          <div>
+            <article class="card">
+              <h3>¿Por qué cola?</h3>
+              <p>Una cola es FIFO: el primero que entra es el primero que sale.</p>
+            </article>
+            <div class="callout" style="margin-top:18px">
+              Resultado por niveles desde Portería:<br>
+              Porteria → Biblioteca, Salones → Cafeteria, Enfermeria
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Grafo · DFS</div>
+        <h2>Búsqueda en profundidad</h2>
+        <span class="source">servicios/recorridos_grafo.py — dfs()</span>
+        <div class="grid">
+          <pre><code>visitados = []
+
+def recorrer(actual):
+    visitados.append(actual)
+    for vecino in consultar_vecinos(actual):
+        if vecino not in visitados:
+            recorrer(vecino)
+
+recorrer(inicio)
+return visitados</code></pre>
+          <article class="card">
+            <h3>¿Por qué recursividad?</h3>
+            <p>Las llamadas pendientes funcionan conceptualmente como una pila LIFO.</p>
+            <ol>
+              <li>Visita el vértice actual.</li>
+              <li>Toma un vecino nuevo.</li>
+              <li>Se llama a sí misma.</li>
+              <li>Cuando termina una rama, vuelve hacia atrás.</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Grafo · Ruta</div>
+        <h2>Buscar ruta mínima</h2>
+        <span class="source">servicios/recorridos_grafo.py — buscar_ruta()</span>
+        <div class="grid">
+          <pre><code>cola.encolar([origen])
+visitados = [origen]
+
+while not cola.esta_vacia():
+    ruta = cola.desencolar()
+    actual = ruta[-1]
+
+    if actual == destino:
+        return ruta
+
+    for vecino in consultar_vecinos(actual):
+        if vecino not in visitados:
+            visitados.append(vecino)
+            cola.encolar(ruta + [vecino])
+
+return None</code></pre>
+          <article class="card">
+            <h3>Funcionamiento</h3>
+            <p>La cola guarda rutas completas. BFS descubre primero las rutas con menos conexiones.</p>
+            <div class="callout">
+              Porteria → Enfermeria:<br>
+              <strong>Porteria → Salones → Enfermeria</strong>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Sistema · Integración</div>
+        <h2>Árbol y grafo dentro de EduCore</h2>
+        <span class="source">main.py</span>
+        <div class="grid">
+          <article class="card">
+            <h3>Instancias creadas</h3>
+            <pre><code>gestion_arbol = GestionArbolEstudiantes()
+grafo = Grafo()
+recorridos = RecorridosGrafo(grafo)</code></pre>
+          </article>
+          <article class="card">
+            <h3>Menús</h3>
+            <ul>
+              <li>Opción 14: grafo y recorridos.</li>
+              <li>Opción 15: árbol de estudiantes.</li>
+              <li>Salir vuelve al menú principal.</li>
+            </ul>
+          </article>
+        </div>
+        <article class="card" style="margin-top:18px">
+          <h3>Sincronización al modificar estudiantes</h3>
+          <table>
+            <thead>
+              <tr><th>Acción</th><th>Lista</th><th>Árbol</th><th>Matriz</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Registrar</td><td>Agrega</td><td>Inserta</td><td>Agrega fila</td></tr>
+              <tr><td>Eliminar</td><td>Elimina</td><td>Elimina nodo</td><td>Elimina fila</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+
+      <section class="slide">
+        <div class="section-label">Conclusión</div>
+        <h2>Complejidades y resumen</h2>
+        <span class="source">Uso de estructuras y algoritmos</span>
+        <div class="grid">
+          <article class="card">
+            <h3>Árbol binario</h3>
+            <table>
+              <tr><th>Operación</th><th>Promedio</th><th>Peor caso</th></tr>
+              <tr><td>Insertar</td><td>O(log n)</td><td>O(n)</td></tr>
+              <tr><td>Buscar</td><td>O(log n)</td><td>O(n)</td></tr>
+              <tr><td>Recorrer</td><td>O(n)</td><td>O(n)</td></tr>
+            </table>
+          </article>
+          <article class="card">
+            <h3>Grafo</h3>
+            <table>
+              <tr><th>Operación</th><th>Complejidad</th></tr>
+              <tr><td>BFS</td><td>O(V + E)</td></tr>
+              <tr><td>DFS</td><td>O(V + E)</td></tr>
+              <tr><td>Ruta mínima BFS</td><td>O(V + E)</td></tr>
+            </table>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="keyboard">← → navegar · M menú</div>
+  <div class="controls">
+    <button id="previous" aria-label="Ventana anterior">← Anterior</button>
+    <span class="counter" id="counter">1 / 16</span>
+    <button id="next" aria-label="Ventana siguiente">Siguiente →</button>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const buttons = Array.from(document.querySelectorAll(".menu button"));
+    const previous = document.getElementById("previous");
+    const next = document.getElementById("next");
+    const counter = document.getElementById("counter");
+    const menuProgress = document.getElementById("menuProgress");
+    let current = 0;
+
+    function showSlide(index) {
+      if (index < 0 || index >= slides.length) return;
+      slides[current].classList.remove("active");
+      buttons[current].classList.remove("active");
+
+      current = index;
+
+      slides[current].classList.add("active");
+      buttons[current].classList.add("active");
+      buttons[current].scrollIntoView({ block: "nearest", inline: "nearest" });
+      slides[current].scrollTop = 0;
+
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      menuProgress.textContent = `Ventana ${current + 1} de ${slides.length}`;
+      previous.disabled = current === 0;
+      next.disabled = current === slides.length - 1;
+      history.replaceState(null, "", `#${current + 1}`);
+    }
+
+    previous.addEventListener("click", () => showSlide(current - 1));
+    next.addEventListener("click", () => showSlide(current + 1));
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => showSlide(Number(button.dataset.slide)));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown") showSlide(current + 1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") showSlide(current - 1);
+      if (event.key === "Home") showSlide(0);
+      if (event.key === "End") showSlide(slides.length - 1);
+    });
+
+    const initial = Number(location.hash.replace("#", ""));
+    if (Number.isInteger(initial) && initial >= 1 && initial <= slides.length) {
+      showSlide(initial - 1);
+    } else {
+      showSlide(0);
+    }
+  </script>
+</body>
+</html>
