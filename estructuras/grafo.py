@@ -43,6 +43,11 @@ class Grafo:
         if not self.existe_dependencia(nombre):
             return []
         return self.vertices[nombre]
+        
+    def consultar_dependencias(self):
+    # Devuelve los nombres de todas las dependencias (los vértices del grafo).
+    return list(self.vertices.keys())
+
 
     def mostrar_grafo(self):
         if not self.vertices:
